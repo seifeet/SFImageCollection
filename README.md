@@ -1,4 +1,4 @@
 SFImageCollection
 =================
 
-UICollectionViewController &amp; ALAssetsLibrary examle
+UICollectionViewController &amp; ALAssetsLibrary example
