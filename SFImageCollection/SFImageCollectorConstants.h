@@ -15,3 +15,6 @@ typedef enum : NSInteger
 } SFImageType;
 
 typedef void (^ImageCollectionCompletionBlock)(NSArray *images, NSError *error);
+typedef void (^ImageDataCompletionBlock)(NSData *imageData,
+                                         NSString *imageName,
+                                         NSError *error);

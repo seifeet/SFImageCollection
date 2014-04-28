@@ -11,13 +11,14 @@
 #import "SFDetailViewController.h"
 #import "SFCollectionViewCell.h"
 #import "SFImageCollector.h"
+#import "SFLibraryImageHelper.h"
 
 static NSString *const kSFConstImageModelKey = @"SFImageModel";
 static NSString *const kSFConstCollectionCellKey = @"SFCollectionViewCell";
 
-static NSString *const kSFConstImageNameKey = @"imageName";
-static NSString *const kSFConstImageDataKey = @"imageData";
-static NSString *const kSFConstImageRatingKey = @"imageRating";
+static NSString *const kSFConstImageURLKey = @"imageURL";
+
+static NSInteger const kSFConstImageFailureCode = -1;
 
 @interface SFMasterViewController ()
 
@@ -46,7 +47,7 @@ static NSString *const kSFConstImageRatingKey = @"imageRating";
     self.title = @"Egregious";
 
     [SFImageCollector imagesOfType:SFImageTypeLibrary
-                   completionBlock:^(NSArray *images, NSError *error)
+                   completionBlock:^(NSArray *imageURLs, NSError *error)
     {
         if (error)
         {
@@ -54,16 +55,11 @@ static NSString *const kSFConstImageRatingKey = @"imageRating";
             return;
         }
 
-        for (NSDictionary *imageParams in images)
+        for (NSDictionary *imageURL in imageURLs)
         {
             NSManagedObject *imageModel = [NSEntityDescription insertNewObjectForEntityForName:kSFConstImageModelKey inManagedObjectContext:AppDelegate.managedObjectContext];
 
-            [imageModel setValue:imageParams[kSFConstImageRatingKey]
-                          forKey:kSFConstImageRatingKey];
-            [imageModel setValue:imageParams[kSFConstImageNameKey]
-                          forKey:kSFConstImageNameKey];
-            [imageModel setValue:imageParams[kSFConstImageDataKey]
-                          forKey:kSFConstImageDataKey];
+            [imageModel setValue:imageURL forKey:kSFConstImageURLKey];
         }
     }];
 }
@@ -89,8 +85,24 @@ static NSString *const kSFConstImageRatingKey = @"imageRating";
     SFCollectionViewCell *cell = (SFCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kSFConstCollectionCellKey forIndexPath:indexPath];
 
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    UIImage *image = [UIImage imageWithData:[object valueForKey:kSFConstImageDataKey]];
-    [cell.imageView setImage:image];
+
+    NSString *urlStr = [object valueForKey:kSFConstImageURLKey];
+    NSURL *url = [NSURL URLWithString:urlStr];
+
+    [SFLibraryImageHelper imageDataFromURL:url completionBlock:^(NSData *imageData, NSString *imageName, NSError *error)
+     {
+         //NSNumber *imageRating = [NSNumber numberWithInt:(arc4random() % 100)];
+
+         if (imageData) {
+
+             UIImage *image = [UIImage imageWithData:imageData];
+             [cell.imageView setImage:image];
+         } else {
+
+             NSError *error = [NSError errorWithDomain:@"SFLibraryImage" code:kSFConstImageFailureCode userInfo:nil];
+             [self processError:error];
+         }
+     }];
 
     return cell;
 }
@@ -121,7 +133,7 @@ static NSString *const kSFConstImageRatingKey = @"imageRating";
     [fetchRequest setFetchBatchSize:20];
 
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:kSFConstImageNameKey ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:kSFConstImageURLKey ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
 
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -244,6 +256,13 @@ static NSString *const kSFConstImageRatingKey = @"imageRating";
 
     [_sectionChanges removeAllObjects];
     [_objectChanges removeAllObjects];
+}
+
+#pragma mark - private methods
+
+- (void)processError:(NSError *)error
+{
+    NSLog(@"Image collection Failure: %@", error.localizedDescription);
 }
 
 @end

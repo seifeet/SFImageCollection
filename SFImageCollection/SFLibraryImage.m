@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 #import "SFLibraryImage.h"
+#import "SFLibraryImageHelper.h"
 
 static NSString *const kSFConstImageNameKey = @"imageName";
 static NSString *const kSFConstImageDataKey = @"imageData";
@@ -43,39 +44,18 @@ static NSString *const kSFConstImageRatingKey = @"imageRating";
 
     void (^assetEnumerator)(ALAsset *, NSUInteger, BOOL *) = ^(ALAsset *result, NSUInteger index, BOOL *stop)
     {
-        if(result != nil) {
+        if(result) {
             if([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto])
             {
-                NSURL *url= (NSURL*) [[result defaultRepresentation]url];
+                NSURL *url = (NSURL*)result.defaultRepresentation.url;
 
-                [library assetForURL:url
-                         resultBlock:^(ALAsset *asset)
-                 {
-                     ALAssetRepresentation *rep = [asset defaultRepresentation];
-                     Byte *buffer = (Byte*)malloc(rep.size);
-                     NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+                [mutableArray addObject:url.absoluteString];
 
-                     NSData *data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-                     NSNumber *imageRating = [NSNumber numberWithInt:(arc4random() % 100)];
-                     NSString *imageName = [rep filename];
-
-                     NSDictionary *imageParams = @{ kSFConstImageDataKey : data,
-                                                    kSFConstImageNameKey : imageName,
-                                                    kSFConstImageRatingKey : imageRating };
-
-                     [mutableArray addObject:imageParams];
-
-                     if ([mutableArray count]==count)
-                     {
-                         imageArray = [[NSArray alloc] initWithArray:mutableArray];
-                         [self allImagesCollected:imageArray];
-                     }
-                 }
-                        failureBlock:^(NSError *error)
-                 {
-                     [self processError:error];
-                 }];
-
+                if ([mutableArray count]==count)
+                {
+                    imageArray = [[NSArray alloc] initWithArray:mutableArray];
+                    [self allImagesCollected:imageArray];
+                }
             }
         }
     };
@@ -84,9 +64,9 @@ static NSString *const kSFConstImageRatingKey = @"imageRating";
 
     void (^ assetGroupEnumerator) (ALAssetsGroup *, BOOL *)= ^(ALAssetsGroup *group, BOOL *stop) {
         if(group != nil) {
-            [group enumerateAssetsUsingBlock:assetEnumerator];
+            count = [group numberOfAssets];
             [assetGroups addObject:group];
-            count=[group numberOfAssets];
+            [group enumerateAssetsUsingBlock:assetEnumerator];
         }
     };
     

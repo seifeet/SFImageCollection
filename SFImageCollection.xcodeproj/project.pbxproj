@@ -27,6 +27,7 @@
 		556D68F318FC97A1009ED5E9 /* SFImageCollection.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 556D68F118FC97A1009ED5E9 /* SFImageCollection.xcdatamodeld */; };
 		556D68F818FC9B65009ED5E9 /* SFLibraryImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 556D68F718FC9B65009ED5E9 /* SFLibraryImage.m */; };
 		556D68FB18FCA602009ED5E9 /* SFImageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 556D68FA18FCA602009ED5E9 /* SFImageCollector.m */; };
+		55CD814E190AE05F00B8B181 /* SFLibraryImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CD814D190AE05F00B8B181 /* SFLibraryImageHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,8 @@
 		556D68F918FCA602009ED5E9 /* SFImageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFImageCollector.h; sourceTree = "<group>"; };
 		556D68FA18FCA602009ED5E9 /* SFImageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFImageCollector.m; sourceTree = "<group>"; };
 		556D68FC18FCA77A009ED5E9 /* SFImageCollectorConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFImageCollectorConstants.h; sourceTree = "<group>"; };
+		55CD814C190AE05F00B8B181 /* SFLibraryImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLibraryImageHelper.h; sourceTree = "<group>"; };
+		55CD814D190AE05F00B8B181 /* SFLibraryImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLibraryImageHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,7 @@
 		556D68B918FC8DDA009ED5E9 /* SFImageCollection */ = {
 			isa = PBXGroup;
 			children = (
+				55CD814B190AE03B00B8B181 /* Classes */,
 				556D68F518FC991B009ED5E9 /* Controller */,
 				556D68F418FC9911009ED5E9 /* API */,
 				556D68CE18FC8DDA009ED5E9 /* Images.xcassets */,
@@ -194,6 +198,15 @@
 				556D68CC18FC8DDA009ED5E9 /* SFMasterViewController.m */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		55CD814B190AE03B00B8B181 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				55CD814C190AE05F00B8B181 /* SFLibraryImageHelper.h */,
+				55CD814D190AE05F00B8B181 /* SFLibraryImageHelper.m */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -298,6 +311,7 @@
 				556D68FB18FCA602009ED5E9 /* SFImageCollector.m in Sources */,
 				556D68C018FC8DDA009ED5E9 /* main.m in Sources */,
 				556D68ED18FC91BA009ED5E9 /* SFCollectionViewCell.m in Sources */,
+				55CD814E190AE05F00B8B181 /* SFLibraryImageHelper.m in Sources */,
 				556D68CD18FC8DDA009ED5E9 /* SFMasterViewController.m in Sources */,
 				556D68C418FC8DDA009ED5E9 /* SFAppDelegate.m in Sources */,
 				556D68F818FC9B65009ED5E9 /* SFLibraryImage.m in Sources */,
@@ -517,6 +531,7 @@
 				556D68E718FC8DDA009ED5E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		556D68E818FC8DDA009ED5E9 /* Build configuration list for PBXNativeTarget "SFImageCollectionTests" */ = {
 			isa = XCConfigurationList;
@@ -525,6 +540,7 @@
 				556D68EA18FC8DDA009ED5E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
