@@ -7,6 +7,9 @@
 //
 
 #import "SFDetailViewController.h"
+#import "SFLibraryImageHelper.h"
+
+static NSString *const kSFConstImageURLKey = @"imageURL";
 
 @interface SFDetailViewController ()
 
@@ -52,8 +55,20 @@
 
     if (self.item)
     {
-        self.imageView.image = [UIImage imageWithData:[self.item valueForKey:@"imageData"]];
-        self.title = [self.item valueForKey:@"imageName"];
+        NSString *urlStr = [self.item valueForKey:kSFConstImageURLKey];
+        NSURL *url = [NSURL URLWithString:urlStr];
+
+        [SFLibraryImageHelper imageDataFromURL:url completionBlock:^(NSData *imageData, NSString *imageName, NSError *error)
+         {
+             //NSNumber *imageRating = [NSNumber numberWithInt:(arc4random() % 100)];
+
+             if (imageData) {
+
+                 self.imageView.image = [UIImage imageWithData:imageData];
+             } else {
+
+             }
+         }];
     }
 }
 
